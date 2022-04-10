@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpserver
+  labels:
+      app: httpserver
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 5
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: httpserver
+  template:
+    metadata:
+      labels:
+        app: httpserver
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: httpserver
+        image: hejiangda/cloud-native-geektime-camp:week8-httpserver-v2
+        ports:
+        - containerPort: 8080
+        # 优雅启动
+        # 先等5秒，再每3秒通过 /healthz 探活
+        readinessProbe:
+          # 就绪探活
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 3
+        livenessProbe:
+          # 探活
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 3
+        resources:
+          # QoS 为Burstable
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 10m
+            memory: 20Mi
+        env:
+          # 配置信息
+          - name: httpport
+            valueFrom:
+              configMapKeyRef:
+                key: httpport
+                name: myenv
+      terminationGracePeriodSeconds: 30
+
