@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+        name: letsencrypt-prod
+spec:
+  acme:
+    email: hejiangda@163.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    solvers:
+      - dns01:
+          webhook:
+            config:
+              accessTokenSecretRef:
+                key: access-token
+                name: alidns-secrets
+              regionId: ""
+              secretKeySecretRef:
+                key: secret-key
+                name: alidns-secrets
+            groupName: acme.yourcompany.com
+            solverName: alidns

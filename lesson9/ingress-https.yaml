@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpserver-80
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ingress.hejiangda.top
+      http:
+        paths:
+          - pathType: Prefix
+            backend:
+              service:
+                name: httpserver
+                port:
+                  number: 80
+            path: /
+  tls:
+    - hosts:
+        -
