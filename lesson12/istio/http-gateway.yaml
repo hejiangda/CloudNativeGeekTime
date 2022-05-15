@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+        - week12.hejiangda.top
+    port:
+        number: 443
+        name: https
+        protocol: HTTPS
+    tls:
+        credentialName: hejiangda-top
+        mode: SIMPLE

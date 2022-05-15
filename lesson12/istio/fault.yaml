@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: httpserver
+spec:
+  hosts:
+    - week12.hejiangda.top
+  gateways:
+    - gateway
+  http:
+    - route:
+        - destination:
+            host: httpserver.week12.svc.cluster.local
+            port:
+              number: 80
+      fault:
+        abort:
+          httpStatus: 500
+          percentage:
+            value: 50
