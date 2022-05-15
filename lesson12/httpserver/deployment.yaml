@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpserver
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
+      labels:
+        app: httpserver
+    spec:
+      containers:
+        - name: httpserver
+          image: hejiangda/cloud-native-geektime-camp:week10-v3
+          ports:
+            - containerPort: 80
+          env:
+            # 配置信息
+            - name: httpport
+              valueFrom:
+                configMapKeyRef:
+                  key: httpport
+                  name: myenv
