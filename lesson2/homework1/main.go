@@ -37,6 +37,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	//Server 端记录访问日志包括客户端 IP，
 	//HTTP 返回码，输出到 server 端的标准输出
 	clientIP := ClientIP(r)
+	log.Println("header:", r.Header)
 	log.Println("clientIP:", clientIP)
 	log.Println("client response code:", 200)
 
